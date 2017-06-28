@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+		<input type="text" id="address" name="address"><button id="get-position">Send Address</button>
+		<br>
+		Latitude: <input type="number" id="lat">
+		Longtitude: <input type="number" id="lng">
+		<br>
+		<!-- <iframe id="map" src="geolocation.php" frameborder="0" width="600" height="700"></iframe> -->
+	<script>
+			var win, button = document.querySelector('#get-position')
+			button.addEventListener('click', function(){
+			if(win == null || win.closed) {
+				win = window.open('geolocation.php?address='+document.querySelector('#address').value, 'GeoLocation', 'left=50%,width=500px,height=600');				
+			}else{
+				win.focus();
+			}
+			// var win = document.getElementById('map').contentWindow;
+			win.postMessage({address: document.querySelector('#address').value}, location.href);
+			window.addEventListener('message', function(event){
+				if(event.origin != location.origin){
+					return;
+				}
+				// var data  = 
+				document.querySelector('#lat').value = event.data.lat;
+				document.querySelector('#lng').value = event.data.lng;
+			});
+		});
+	</script>
+</body>
+</html>
